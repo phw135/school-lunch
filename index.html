@@ -1,144 +1,44 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>시간표</title>
-  <style>
-    *{box-sizing:border-box}
-    :root{--bg:#fff;--text:#202123;--muted:#777;--line:#e7e7e7;--soft:#f6f6f6;--today:#f2f2f2}
-    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",sans-serif}
-    body{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
-    .wrap{width:min(980px,calc(100% - 28px));margin:0 auto;padding:34px 0}
-    .top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
-    h1{font-size:28px;line-height:1;margin:0;font-weight:700;letter-spacing:-.5px}
-    .date{font-size:13px;color:var(--muted);margin-top:9px}
-    .edit{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer}
-    .today-card{border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:22px}
-    .today-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-    .today-title{font-size:17px;font-weight:650}.today-day{font-size:13px;color:var(--muted)}
-    .today-list{display:grid;gap:0}
-    .today-row{display:grid;grid-template-columns:58px 1fr;align-items:center;min-height:43px;border-top:1px solid var(--line)}
-    .today-row:first-child{border-top:0}.period{font-size:13px;color:var(--muted)}.subject{font-size:15px;font-weight:520}
-    .table-shell{overflow-x:auto;border:1px solid var(--line);border-radius:22px}
-    table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:680px;background:#fff}
-    th,td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
-    th:last-child,td:last-child{border-right:0}tr:last-child td{border-bottom:0}
-    th{height:52px;font-size:14px;font-weight:600;background:#fff}.corner{width:76px;color:var(--muted);font-weight:500}
-    td{height:68px;padding:8px;font-size:14px;vertical-align:middle;transition:.15s ease}
-    .pnum{width:76px;color:var(--muted);font-size:13px;background:#fff}
-    .today-col{background:var(--today)}
-    td.cell[contenteditable="true"]{outline:0;cursor:text;background:#fff7d6}
-    td.cell[contenteditable="true"]:focus{box-shadow:inset 0 0 0 2px #111}
-    .hint{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}
-    @media(max-width:640px){.wrap{width:calc(100% - 20px);padding-top:24px}.top{align-items:center}h1{font-size:25px}.today-card{border-radius:18px;padding:17px}.table-shell{border-radius:18px}th{height:48px}td{height:62px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>중생대 CO₂ Snake</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0d10;color:#f5f7fa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif}.wrap{width:min(760px,calc(100% - 24px));margin:auto;padding:24px 0 40px}.banner{min-height:96px;border:1px solid #2b3038;border-radius:18px;padding:17px 18px;background:#14181d;display:flex;align-items:center;justify-content:space-between;gap:14px}.tag{font-size:11px;letter-spacing:.12em;color:#8f9aa7;font-weight:700}.fact{font-size:16px;font-weight:650;line-height:1.45;margin-top:6px}.timer{flex:none;text-align:center;color:#9aa4af;font-size:11px}.timer b{display:block;color:#fff;font-size:22px}.head{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 10px;gap:12px}.title{font-size:22px;font-weight:750}.score{font-size:13px;color:#a8b0ba}.score b{color:#fff;font-size:16px}.gamebox{border:1px solid #2b3038;background:#111419;border-radius:20px;padding:12px}canvas{display:block;width:100%;height:auto;border-radius:12px;background:#171b20}.status{text-align:center;color:#929ca8;font-size:13px;margin:10px 0 2px}.actions{display:flex;justify-content:center;gap:8px;margin:12px 0}.actions button,.pad button{border:1px solid #343a43;background:#171b20;color:#fff;border-radius:12px;min-height:44px;padding:0 16px;font-size:14px;cursor:pointer}.actions button.primary{background:#f1f3f5;color:#111;border-color:#f1f3f5;font-weight:700}.pad{width:176px;margin:14px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.pad button{padding:0;font-size:19px}.pad .up{grid-column:2}.pad .left{grid-column:1}.pad .down{grid-column:2}.pad .right{grid-column:3}.note{margin-top:20px;padding-top:15px;border-top:1px solid #262b31;color:#8d97a2;font-size:12px;line-height:1.55}@media(max-width:520px){.wrap{width:calc(100% - 16px);padding-top:12px}.banner{border-radius:15px;padding:14px}.fact{font-size:14px}.title{font-size:19px}.gamebox{padding:8px;border-radius:16px}}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="top">
-      <div>
-        <h1>시간표</h1>
-        <div id="date" class="date"></div>
-      </div>
-      <button id="edit" class="edit">편집</button>
-    </div>
-
-    <section class="today-card">
-      <div class="today-head">
-        <div class="today-title">오늘 시간표</div>
-        <div id="todayDay" class="today-day"></div>
-      </div>
-      <div id="todayList" class="today-list"></div>
-    </section>
-
-    <section class="table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th class="corner">교시</th>
-            <th data-day="0">월</th>
-            <th data-day="1">화</th>
-            <th data-day="2">수</th>
-            <th data-day="3">목</th>
-            <th data-day="4">금</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </section>
-    <div class="hint">편집을 누른 뒤 과목을 입력하면 이 기기에 자동 저장됩니다.</div>
-  </main>
-
-  <script>
-    const DAYS=['월요일','화요일','수요일','목요일','금요일'];
-    const PERIODS=7;
-    const KEY='jamsil-timetable-v1';
-    let editing=false;
-    let data=JSON.parse(localStorage.getItem(KEY) || 'null') || Array.from({length:PERIODS},()=>Array(5).fill(''));
-
-    const tbody=document.getElementById('tbody');
-    const editBtn=document.getElementById('edit');
-    const todayList=document.getElementById('todayList');
-    const now=new Date();
-    const dayIndex=now.getDay()-1;
-
-    document.getElementById('date').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(now);
-    document.getElementById('todayDay').textContent=(dayIndex>=0&&dayIndex<5)?DAYS[dayIndex]:'주말';
-
-    function renderTable(){
-      tbody.innerHTML='';
-      for(let p=0;p<PERIODS;p++){
-        const tr=document.createElement('tr');
-        const num=document.createElement('td');
-        num.className='pnum';num.textContent=`${p+1}교시`;tr.appendChild(num);
-        for(let d=0;d<5;d++){
-          const td=document.createElement('td');
-          td.className='cell'+(d===dayIndex?' today-col':'');
-          td.dataset.p=p;td.dataset.d=d;
-          td.textContent=data[p][d] || '—';
-          td.contentEditable=editing ? 'true':'false';
-          td.addEventListener('focus',()=>{if(td.textContent==='—')td.textContent=''});
-          td.addEventListener('blur',()=>{
-            const value=td.textContent.trim();
-            data[p][d]=value==='—'?'':value;
-            save();
-            renderToday();
-            if(!value)td.textContent='—';
-          });
-          tr.appendChild(td);
-        }
-        tbody.appendChild(tr);
-      }
-      document.querySelectorAll('th[data-day]').forEach(th=>{if(Number(th.dataset.day)===dayIndex)th.classList.add('today-col');});
-    }
-
-    function renderToday(){
-      todayList.innerHTML='';
-      if(dayIndex<0||dayIndex>4){
-        todayList.innerHTML='<div class="subject">오늘은 주말입니다.</div>';
-        return;
-      }
-      for(let p=0;p<PERIODS;p++){
-        const row=document.createElement('div');row.className='today-row';
-        row.innerHTML=`<div class="period">${p+1}교시</div><div class="subject">${escapeHtml(data[p][dayIndex]||'—')}</div>`;
-        todayList.appendChild(row);
-      }
-    }
-
-    function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-    function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-
-    editBtn.addEventListener('click',()=>{
-      editing=!editing;
-      editBtn.textContent=editing?'완료':'편집';
-      if(!editing)save();
-      renderTable();
-    });
-
-    renderTable();
-    renderToday();
-  </script>
+<main class="wrap" id="app" tabindex="0">
+<section class="banner"><div><div class="tag">MESOZOIC · CO₂ FACT</div><div id="fact" class="fact">중생대에는 대체로 대기 중 이산화탄소 농도가 높았습니다.</div></div><div class="timer">다음 문장<b id="timer">15</b>초</div></section>
+<div class="head"><div class="title">CO₂ Snake</div><div class="score">흡수 <b id="score">0</b> · 최고 <b id="best">0</b></div></div>
+<section class="gamebox"><canvas id="game" width="600" height="600" aria-label="CO2 스네이크 게임"></canvas><div id="status" class="status">방향키 또는 아래 버튼으로 CO₂를 먹으세요.</div></section>
+<div class="actions"><button id="pause">일시정지</button><button id="restart" class="primary">다시 시작</button></div>
+<div class="pad"><button class="up" data-dir="up">↑</button><button class="left" data-dir="left">←</button><button class="down" data-dir="down">↓</button><button class="right" data-dir="right">→</button></div>
+<div class="note">게임 속 CO₂ 흡수는 학습용 표현입니다. 중생대의 실제 대기 CO₂ 농도 변화는 지질학적 자료와 모델을 통해 추정됩니다.</div>
+</main>
+<script>
+const facts=[
+'중생대에는 대체로 대기 중 이산화탄소 농도가 높았습니다.',
+'높은 대기 CO₂ 농도는 강한 온실효과와 중생대의 온난한 기후에 영향을 주었습니다.',
+'중생대에는 판게아가 분열하면서 대륙의 배치와 해양 환경이 크게 변화했습니다.',
+'화산 활동과 장기간의 탄소 순환은 중생대 대기 CO₂ 농도 변화와 관련이 있습니다.',
+'중생대의 높은 기온과 적은 대륙 빙하는 높은 해수면을 유지하는 데 영향을 주었습니다.',
+'중생대 CO₂ 농도는 시대 전체에서 일정하지 않았으며 시기별로 크게 변동했습니다.'
+];
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');const N=20,S=canvas.width/N;
+let snake,food,dir,nextDir,score,best=Number(localStorage.getItem('co2-snake-best')||0),running=true,dead=false,last=0,step=125;
+const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),statusEl=document.getElementById('status'),pauseBtn=document.getElementById('pause');bestEl.textContent=best;
+function reset(){snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir={x:1,y:0};nextDir={x:1,y:0};score=0;dead=false;running=true;pauseBtn.textContent='일시정지';scoreEl.textContent=0;statusEl.textContent='방향키 또는 아래 버튼으로 CO₂를 먹으세요.';spawn();draw()}
+function spawn(){do{food={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}while(snake.some(p=>p.x===food.x&&p.y===food.y))}
+function setDir(x,y){if(dead)return;if(x===-dir.x&&y===-dir.y)return;nextDir={x,y};running=true}
+function tick(){dir=nextDir;const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.x>=N||h.y<0||h.y>=N||snake.some(p=>p.x===h.x&&p.y===h.y)){dead=true;running=false;statusEl.textContent='게임 오버 — 다시 시작을 눌러 재도전하세요.';draw();return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score++;scoreEl.textContent=score;if(score>best){best=score;bestEl.textContent=best;localStorage.setItem('co2-snake-best',best)}spawn()}else snake.pop();draw()}
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function draw(){ctx.fillStyle='#171b20';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='#20252b';ctx.lineWidth=1;for(let i=1;i<N;i++){ctx.beginPath();ctx.moveTo(i*S,0);ctx.lineTo(i*S,canvas.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*S);ctx.lineTo(canvas.width,i*S);ctx.stroke()}ctx.fillStyle='#eef1f4';snake.forEach((p,i)=>{ctx.globalAlpha=i===0?1:.72;roundRect(p.x*S+3,p.y*S+3,S-6,S-6,7)});ctx.globalAlpha=1;ctx.fillStyle='#7d8792';ctx.beginPath();ctx.arc(food.x*S+S/2,food.y*S+S/2,S*.39,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('CO₂',food.x*S+S/2,food.y*S+S/2+.5);if(dead){ctx.fillStyle='rgba(0,0,0,.58)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.font='700 38px sans-serif';ctx.fillText('GAME OVER',canvas.width/2,canvas.height/2)}}
+function loop(t){if(running&&!dead&&t-last>=step){last=t;tick()}requestAnimationFrame(loop)}
+document.addEventListener('keydown',e=>{const m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};if(m[e.key]){e.preventDefault();setDir(...m[e.key])}});document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>{const m={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};setDir(...m[b.dataset.dir])}));pauseBtn.addEventListener('click',()=>{if(dead)return;running=!running;pauseBtn.textContent=running?'일시정지':'계속하기';statusEl.textContent=running?'게임을 진행 중입니다.':'일시정지됨';});document.getElementById('restart').addEventListener('click',reset);
+let factIndex=0,count=15;setInterval(()=>{count--;if(count<=0){count=15;factIndex=(factIndex+1)%facts.length;document.getElementById('fact').textContent=facts[factIndex]}document.getElementById('timer').textContent=count},1000);
+reset();requestAnimationFrame(loop);
+</script>
 </body>
 </html>
